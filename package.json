@@ -6,8 +6,6 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
-    "@types/react": "^16.14.11",
-    "@types/react-dom": "^17.0.9",
     "bootstrap": "^5.0.2",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
@@ -30,12 +28,6 @@
     "lint:stylelint": "stylelint **/*.{css,scss} & stylelint **/*.{tsx,jsx} --config .stylelintrc.styled-components.js",
     "fix:stylelint": "stylelint --fix  **/*.{css,scss}"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -49,6 +41,8 @@
     ]
   },
   "devDependencies": {
+    "@types/react": "^16.14.11",
+    "@types/react-dom": "^17.0.9",
     "@types/styled-components": "^5.1.11",
     "@typescript-eslint/eslint-plugin": "^4.28.4",
     "@typescript-eslint/parser": "^4.28.4",
