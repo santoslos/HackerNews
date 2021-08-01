@@ -1,42 +1,77 @@
 import React from 'react';
-import './App.css';
 import { StoreNews } from './hooks/store';
 import NewsItem from './components/NewsItem';
-import Prealoader from './components/common/Preloader/Preloader';
+import Preloader from './components/common/Preloader/Preloader';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Route, Switch } from 'react-router-dom';
+import ProfileNews from './components/ProfileNews';
+import styled from 'styled-components';
 
+const Main = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  align-items: center;
+`;
+
+const Content = styled.div`
+  background-color: lightgray;
+  padding: 10px;
+`;
+const ListNews = styled.ul``;
 
 function App() {
-    const {orderedNews, setNewPage} = StoreNews();
-
-    return (
-        <div>
-            {!orderedNews.length ? <Prealoader/>
-                :
-                (
-                    <div className="App">
-                        <button
-                            onClick={() => {
-                                setNewPage(2);
-                            }}
-                        >
-                            click
-                        </button>
-                        <ul>
-                            {orderedNews.map((newsItem) => (
-                                <NewsItem
-                                    key={newsItem.id}
-                                    title={newsItem.title}
-                                    points={newsItem.points}
-                                    user={newsItem.user}
-                                    timeAgo={newsItem.time_ago}
-                                />
-                            ))}
-                        </ul>
-                    </div>
-                )}
-        </div>
-    );
+  const { orderedNews, setNewPage, reload, page } = StoreNews();
+  return (
+    <Main>
+      {!orderedNews.length ? (
+        <Preloader />
+      ) : (
+        <Content>
+          <Switch>
+            <Route exact path={'/news'}>
+              <ul className={'pagination'}>
+                <li
+                  className={'page-item'}
+                  onClick={() => {
+                    setNewPage(page - 1);
+                  }}
+                >
+                  {' '}
+                  <button className={'page-link'}>&laquo;</button>
+                </li>
+                <li
+                  className={'page-item'}
+                  onClick={() => {
+                    setNewPage(page + 1);
+                  }}
+                >
+                  <button className={'page-link'}>&raquo;</button>
+                </li>
+              </ul>
+              <button onClick={reload} className="btn btn-primary">
+                {' '}
+                reload
+              </button>
+              <ListNews className={'list-group'}>
+                {orderedNews.map((newsItem) => (
+                  <NewsItem
+                    key={newsItem.id}
+                    title={newsItem.title}
+                    points={newsItem.points}
+                    user={newsItem.user}
+                    timeAgo={newsItem.time_ago}
+                    id={newsItem.id}
+                  />
+                ))}
+              </ListNews>
+            </Route>
+            <Route path="/news/:id" children={<ProfileNews />} />
+          </Switch>
+        </Content>
+      )}
+    </Main>
+  );
 }
 
 export default App;

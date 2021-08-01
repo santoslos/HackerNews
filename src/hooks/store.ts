@@ -3,21 +3,25 @@ import axios from 'axios';
 import { News } from '../types/News';
 import useSWR from 'swr';
 
-const getNews = async (url:string) =>{
- let response = await axios.get<News[]>(url);
+const getNews = async (url: string) => {
+  let response = await axios.get<News[]>(url);
   return response.data;
 };
 
 export function StoreNews() {
   const [page, setPage] = useState(1);
   const [idInterval, setIdInterval] = useState(0);
-  const {data, mutate} = useSWR(`https://api.hnpwa.com/v0/newest/${page}.json`, getNews);
+  let { data, mutate } = useSWR(`https://api.hnpwa.com/v0/newest/${page}.json`, getNews);
 
   let time = React.useCallback(() => {
     return setInterval(() => {
       mutate(data, true);
     }, 60000);
   }, [page]);
+
+  const reload = () => {
+    mutate(data, true);
+  };
 
   const setNewPage = React.useCallback((newPage: number) => {
     if (newPage > 12) setPage(12);
@@ -38,20 +42,19 @@ export function StoreNews() {
     setIdInterval(id);
   }, [page]);
 
-
-    const orderedNews = useMemo(() => {
-      if (data){
-        let sort = [...data].sort((a, b) => (a.time < b.time ? 1 : -1));
-        return sort;
-      }
-      else {
-        return [];
-      }
-    }, [data]);
-
+  const orderedNews = useMemo(() => {
+    if (data) {
+      let sort = [...data].sort((a, b) => (a.time < b.time ? 1 : -1));
+      return sort;
+    } else {
+      return [];
+    }
+  }, [data]);
 
   return {
     orderedNews,
     setNewPage,
+    reload,
+    page,
   };
 }

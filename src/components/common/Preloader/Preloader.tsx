@@ -9,7 +9,6 @@ const PreloaderStyle = styled.div`
   size: 5px;
 `;
 
-
 let Preloader = () => {
   return (
     <PreloaderStyle>
