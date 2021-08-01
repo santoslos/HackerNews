@@ -14,12 +14,20 @@ const Main = styled.div`
   align-items: center;
 `;
 
+const Reload = styled.button`
+  margin-left: 30px;
+`;
+
 const Content = styled.div`
   background-color: lightgray;
   padding: 10px;
 `;
 const ListNews = styled.ul``;
 
+const Paginator = styled.ul`
+  display: flex;
+  justify-content: center;
+`;
 function App() {
   const { orderedNews, setNewPage, reload, page } = StoreNews();
   return (
@@ -30,7 +38,7 @@ function App() {
         <Content>
           <Switch>
             <Route exact path={'/news'}>
-              <ul className={'pagination'}>
+              <Paginator className={'pagination'}>
                 <li
                   className={'page-item'}
                   onClick={() => {
@@ -48,11 +56,11 @@ function App() {
                 >
                   <button className={'page-link'}>&raquo;</button>
                 </li>
-              </ul>
-              <button onClick={reload} className="btn btn-primary">
-                {' '}
-                reload
-              </button>
+                <Reload onClick={reload} className="btn btn-primary">
+                  {' '}
+                  reload
+                </Reload>
+              </Paginator>
               <ListNews className={'list-group'}>
                 {orderedNews.map((newsItem) => (
                   <NewsItem

@@ -26,6 +26,9 @@ const TittleComment = styled.div`
 `;
 
 const Comments = ({ comments }: Comments) => {
+  comments.map((comment) => {
+    console.log(comment.comments);
+  });
   return (
     <Comment>
       {comments.map((comment) => (
@@ -35,10 +38,7 @@ const Comments = ({ comments }: Comments) => {
             {comment.user} {comment.time_ago}
           </TittleComment>
           <CommentsContent dangerouslySetInnerHTML={{ __html: comment.content }} />
-          {comment.comments.length > 0 &&
-            comment.comments.map((child) => {
-              return <Comments key={child.id} comments={child.comments} />;
-            })}
+          {comment.comments.length > 0 && <Comments key={comment.id} comments={comment.comments} />}
         </CommentsItem>
       ))}
     </Comment>
