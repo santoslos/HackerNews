@@ -1,5 +1,5 @@
 import React from 'react';
-import { StoreNews } from './hooks/store';
+import { StoreNews } from './hooks/storeNews';
 import NewsItem from './components/NewsItem';
 import Preloader from './components/common/Preloader/Preloader';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -22,12 +22,14 @@ const Content = styled.div`
   background-color: lightgray;
   padding: 10px;
 `;
+
 const ListNews = styled.ul``;
 
 const Paginator = styled.ul`
   display: flex;
   justify-content: center;
 `;
+
 function App() {
   const { orderedNews, setNewPage, reload, page } = StoreNews();
   return (
@@ -37,7 +39,7 @@ function App() {
       ) : (
         <Content>
           <Switch>
-            <Route exact path={'/news'}>
+            <Route exact path={['/news', '/']}>
               <Paginator className={'pagination'}>
                 <li
                   className={'page-item'}
@@ -57,7 +59,6 @@ function App() {
                   <button className={'page-link'}>&raquo;</button>
                 </li>
                 <Reload onClick={reload} className="btn btn-primary">
-                  {' '}
                   reload
                 </Reload>
               </Paginator>

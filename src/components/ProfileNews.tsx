@@ -1,16 +1,15 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 import Preloader from './common/Preloader/Preloader';
 import Comments from './Comments';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import {StoreComments} from '../hooks/storeComments';
+
+import { StoreComments } from '../hooks/storeComments';
 
 interface NewsProps {
   id: string | undefined;
 }
-
 
 const StyleFooterItem = styled.div`
   margin-top: 5px;
@@ -44,14 +43,31 @@ const ItemTitle = styled.div`
 
 const ListComments = styled.ul``;
 
+const ItemStyle = styled.div`
+  margin: 0 auto;
+`;
+
+const ItemButton = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+`;
+
 const ProfileNews = () => {
   let { id }: NewsProps = useParams();
-  let { data } = StoreComments(id);
+  const { data, reload } = StoreComments(id);
+
   if (!data) {
     return <Preloader />;
   } else {
     return (
-      <div>
+      <ItemStyle>
+        <ItemButton>
+          <button onClick={reload} className="btn btn-primary">
+            {' '}
+            reload
+          </button>
+        </ItemButton>
         <ItemTitle>
           <LinkBack to={'/news'}>
             {' '}
@@ -60,14 +76,12 @@ const ProfileNews = () => {
           <NavLink href={`${data.url}`}>{data.title}</NavLink>
         </ItemTitle>
         <StyleFooterItem>
-          <span>
-            {data.points} points by {data.user} {data.time_ago} | commentsCount: {data.comments_count}
-          </span>
+          {data.points} points by {data.user} {data.time_ago} | commentsCount: {data.comments_count}
         </StyleFooterItem>
         <ListComments className={'list-group'}>
-          <Comments comments={data.comments} />
+          <Comments key={data.id} comments={data.comments} />
         </ListComments>
-      </div>
+      </ItemStyle>
     );
   }
 };

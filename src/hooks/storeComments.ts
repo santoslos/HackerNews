@@ -10,7 +10,7 @@ const getItem = async (url: string) => {
 
 export function StoreComments(id: string | undefined) {
   const [idInterval, setIdInterval] = useState(0);
-  let { data, mutate } = useSWR(`https://api.hnpwa.com/v0/items/${id}.json`, getItem);
+  let { data, mutate } = useSWR(`https://api.hnpwa.com/v0/item/${id}.json`, getItem);
 
   let time = React.useCallback(() => {
     return setInterval(() => {
@@ -33,7 +33,7 @@ export function StoreComments(id: string | undefined) {
   }, [id]);
 
   return {
-    reload,
     data,
+    reload,
   };
 }
