@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StoreNews } from './hooks/storeNews';
 import NewsItem from './components/NewsItem';
 import Preloader from './components/common/Preloader/Preloader';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, NavLink, useLocation } from 'react-router-dom';
 import ProfileNews from './components/ProfileNews';
 import styled from 'styled-components';
 
@@ -30,56 +30,79 @@ const Paginator = styled.ul`
   justify-content: center;
 `;
 
+const Body = styled.div`
+  width: 1250px;
+  margin: 0 auto;
+  background-color: lightgray;
+`;
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 function App() {
   const { orderedNews, setNewPage, reload, page } = StoreNews();
+  let query = useQuery();
+  useEffect(() => {
+    let pageNow = query.get('page');
+    if (pageNow) {
+      setNewPage(Number(pageNow));
+    }
+  }, []);
   return (
-    <Main>
-      {!orderedNews.length ? (
-        <Preloader />
-      ) : (
-        <Content>
-          <Switch>
-            <Route exact path={['/news', '/']}>
-              <Paginator className={'pagination'}>
-                <li
-                  className={'page-item'}
-                  onClick={() => {
-                    setNewPage(page - 1);
-                  }}
-                >
-                  {' '}
-                  <button className={'page-link'}>&laquo;</button>
-                </li>
-                <li
-                  className={'page-item'}
-                  onClick={() => {
-                    setNewPage(page + 1);
-                  }}
-                >
-                  <button className={'page-link'}>&raquo;</button>
-                </li>
-                <Reload onClick={reload} className="btn btn-primary">
-                  reload
-                </Reload>
-              </Paginator>
-              <ListNews className={'list-group'}>
-                {orderedNews.map((newsItem) => (
-                  <NewsItem
-                    key={newsItem.id}
-                    title={newsItem.title}
-                    points={newsItem.points}
-                    user={newsItem.user}
-                    timeAgo={newsItem.time_ago}
-                    id={newsItem.id}
-                  />
-                ))}
-              </ListNews>
-            </Route>
-            <Route path="/news/:id" children={<ProfileNews />} />
-          </Switch>
-        </Content>
-      )}
-    </Main>
+    <Body>
+      <Main>
+        {!orderedNews.length ? (
+          <Preloader />
+        ) : (
+          <Content>
+            <Switch>
+              <Route exact path={['/news', '/', `/news?page=${page}`]}>
+                <Paginator className={'pagination'}>
+                  <NavLink to={page <= 1 ? `/news?page=${1}` : `/news?page=${page - 1}`}>
+                    <li
+                      className={'page-item'}
+                      onClick={() => {
+                        setNewPage(page - 1);
+                      }}
+                    >
+                      {' '}
+                      <button className={'page-link'}>&laquo;</button>
+                    </li>
+                  </NavLink>
+                  <NavLink to={page >= 10 ? `/news?page=${10}` : `/news?page=${page + 1}`}>
+                    <li
+                      className={'page-item'}
+                      onClick={() => {
+                        setNewPage(page + 1);
+                      }}
+                    >
+                      <button className={'page-link'}>&raquo;</button>
+                    </li>
+                  </NavLink>
+                  <Reload onClick={reload} className="btn btn-primary">
+                    reload
+                  </Reload>
+                </Paginator>
+                <ListNews className={'list-group'}>
+                  {orderedNews.map((newsItem) => (
+                    <NewsItem
+                      key={newsItem.id}
+                      title={newsItem.title}
+                      points={newsItem.points}
+                      user={newsItem.user}
+                      timeAgo={newsItem.time_ago}
+                      id={newsItem.id}
+                    />
+                  ))}
+                </ListNews>
+              </Route>
+              <Route path="/news/:id" children={<ProfileNews />} />
+            </Switch>
+          </Content>
+        )}
+      </Main>
+    </Body>
   );
 }
 

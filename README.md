@@ -1,5 +1,6 @@
 # HackerNews
- Интерфейс для сайта Hacker News, состоящий из двух страниц.
+
+Интерфейс для сайта Hacker News, состоящий из двух страниц.
 
 # Getting Started with Create React App
 

@@ -3,7 +3,6 @@ import { Item } from '../types/News';
 import styled from 'styled-components';
 import Comments from './Comments';
 
-
 interface commentProps {
   comment: Item;
 }

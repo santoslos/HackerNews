@@ -24,7 +24,7 @@ export function StoreNews() {
   };
 
   const setNewPage = React.useCallback((newPage: number) => {
-    if (newPage > 12) setPage(12);
+    if (newPage > 10) setPage(10);
     else if (newPage < 1) {
       setPage(1);
     } else {
