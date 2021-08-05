@@ -36,10 +36,6 @@ const Body = styled.div`
   background-color: lightgray;
 `;
 
-// function useQuery() {
-//   return new URLSearchParams(useLocation().search);
-// }
-
 function App() {
   const { orderedNews, setNewPage, reload, page } = StoreNews();
   let search = useLocation().search;
@@ -51,7 +47,7 @@ function App() {
     if (pageNow) {
       setNewPage(Number(pageNow));
     }
-  }, []);
+  }, [query]);
   return (
     <Body>
       <Main>
