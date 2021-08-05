@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useMemo } from 'react';
 import { StoreNews } from './hooks/storeNews';
 import NewsItem from './components/NewsItem';
 import Preloader from './components/common/Preloader/Preloader';
@@ -36,13 +36,16 @@ const Body = styled.div`
   background-color: lightgray;
 `;
 
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
+// function useQuery() {
+//   return new URLSearchParams(useLocation().search);
+// }
 
 function App() {
   const { orderedNews, setNewPage, reload, page } = StoreNews();
-  let query = useQuery();
+  let search = useLocation().search;
+  let query = useMemo(()=>  { return new URLSearchParams(search); },
+      [search]);
+
   useEffect(() => {
     let pageNow = query.get('page');
     if (pageNow) {
