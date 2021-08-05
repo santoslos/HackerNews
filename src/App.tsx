@@ -1,4 +1,4 @@
-import React, { useEffect,useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { StoreNews } from './hooks/storeNews';
 import NewsItem from './components/NewsItem';
 import Preloader from './components/common/Preloader/Preloader';
@@ -36,18 +36,25 @@ const Body = styled.div`
   background-color: lightgray;
 `;
 
-function App() {
-  const { orderedNews, setNewPage, reload, page } = StoreNews();
+function useQuery() {
   let search = useLocation().search;
   let query = useMemo(()=>  { return new URLSearchParams(search); },
       [search]);
+  return query;
+}
+
+function App() {
+  const { orderedNews, setNewPage, reload, page } = StoreNews();
+
+  let query = useQuery();
+
+  const pageNow = useMemo(() => Number(query.get('page')), [query.get('page')]);
 
   useEffect(() => {
-    let pageNow = query.get('page');
     if (pageNow) {
-      setNewPage(Number(pageNow));
+      setNewPage(pageNow);
     }
-  }, [query]);
+  }, [pageNow]);
   return (
     <Body>
       <Main>
@@ -58,27 +65,13 @@ function App() {
             <Switch>
               <Route exact path={['/news', '/', `/news?page=${page}`]}>
                 <Paginator className={'pagination'}>
-                  <NavLink to={page <= 1 ? `/news?page=${1}` : `/news?page=${page - 1}`}>
-                    <li
-                      className={'page-item'}
-                      onClick={() => {
-                        setNewPage(page - 1);
-                      }}
-                    >
+                    <li className={'page-item'}>
                       {' '}
-                      <button className={'page-link'}>&laquo;</button>
+                      <NavLink to={page <= 1 ? `/news?page=${1}` : `/news?page=${page - 1}`} className={'page-link'}>&laquo;</NavLink>
                     </li>
-                  </NavLink>
-                  <NavLink to={page >= 10 ? `/news?page=${10}` : `/news?page=${page + 1}`}>
-                    <li
-                      className={'page-item'}
-                      onClick={() => {
-                        setNewPage(page + 1);
-                      }}
-                    >
-                      <button className={'page-link'}>&raquo;</button>
+                    <li className={'page-item'}>
+                      <NavLink to={page >= 10 ? `/news?page=${10}` : `/news?page=${page + 1}`} className={'page-link'}>&raquo;</NavLink>
                     </li>
-                  </NavLink>
                   <Reload onClick={reload} className="btn btn-primary">
                     reload
                   </Reload>
