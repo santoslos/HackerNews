@@ -11,20 +11,20 @@ const getNews = async (url: string) => {
 export function StoreNews() {
   const [page, setPage] = useState(1);
   const [idInterval, setIdInterval] = useState(0);
-  let { data, mutate } = useSWR(`https://api.hnpwa.com/v0/newest/${page}.json`, getNews);
+  let { data, mutate, isValidating } = useSWR(`https://api.hnpwa.com/v0/newest/${page}.json`, getNews);
 
-  let time = React.useCallback(() => {
+  let time = React.useCallback( () => {
     return setInterval(() => {
       mutate(data, true);
     }, 60000);
   }, [page]);
 
-  const reload = () => {
+  const reload =  () => {
     mutate(data, true);
   };
 
   const setNewPage = React.useCallback((newPage: number) => {
-    if (newPage > 10) setPage(10);
+    if (newPage > 12) setPage(12);
     else if (newPage < 1) {
       setPage(1);
     } else {
@@ -32,7 +32,7 @@ export function StoreNews() {
     }
   }, []);
 
-  useEffect(() => {
+  useEffect( () => {
     if (idInterval) {
       clearInterval(idInterval);
     }
@@ -46,8 +46,6 @@ export function StoreNews() {
     if (data) {
       let sort = [...data].sort((a, b) => (a.time < b.time ? 1 : -1));
       return sort;
-    } else {
-      return [];
     }
   }, [data]);
 
@@ -56,5 +54,6 @@ export function StoreNews() {
     setNewPage,
     reload,
     page,
+    isValidating,
   };
 }

@@ -7,6 +7,7 @@ const PreloaderStyle = styled.div`
   align-items: center;
   justify-content: center;
   size: 5px;
+  background-color: lightgrey;
 `;
 
 let Preloader = () => {

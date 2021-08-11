@@ -44,10 +44,8 @@ function useQuery() {
 }
 
 function App() {
-  const { orderedNews, setNewPage, reload, page } = StoreNews();
-
+  const { orderedNews, setNewPage, reload, page, isValidating } = StoreNews();
   let query = useQuery();
-
   const pageNow = useMemo(() => Number(query.get('page')), [query.get('page')]);
 
   useEffect(() => {
@@ -55,27 +53,32 @@ function App() {
       setNewPage(pageNow);
     }
   }, [pageNow]);
+
+  if (isValidating || !orderedNews){
+    return  (<Preloader />);
+  }
+
   return (
     <Body>
       <Main>
-        {!orderedNews.length ? (
-          <Preloader />
-        ) : (
           <Content>
             <Switch>
               <Route exact path={['/news', '/', `/news?page=${page}`]}>
                 <Paginator className={'pagination'}>
-                    <li className={'page-item'}>
-                      {' '}
-                      <NavLink to={page <= 1 ? `/news?page=${1}` : `/news?page=${page - 1}`} className={'page-link'}>&laquo;</NavLink>
-                    </li>
-                    <li className={'page-item'}>
-                      <NavLink to={page >= 10 ? `/news?page=${10}` : `/news?page=${page + 1}`} className={'page-link'}>&raquo;</NavLink>
-                    </li>
+                  <li className={'page-item'}>
+                    {' '}
+                    <NavLink to={page <= 1 ? `/news?page=${1}` : `/news?page=${page - 1}`} className={'page-link'}>&laquo;</NavLink>
+                  </li>
+                  <li className={'page-item'}>
+                    <NavLink to={page >= 12 ? `/news?page=${12}` : `/news?page=${page + 1}`} className={'page-link'}>&raquo;</NavLink>
+                  </li>
                   <Reload onClick={reload} className="btn btn-primary">
                     reload
                   </Reload>
                 </Paginator>
+                {!(orderedNews.length) ? (
+                    <div> Нет данных</div>
+                ) : (
                 <ListNews className={'list-group'}>
                   {orderedNews.map((newsItem) => (
                     <NewsItem
@@ -87,12 +90,11 @@ function App() {
                       id={newsItem.id}
                     />
                   ))}
-                </ListNews>
+                </ListNews>)}
               </Route>
-              <Route path="/news/:id" children={<ProfileNews />} />
+              <Route path='/news/:id' children={<ProfileNews />} />
             </Switch>
           </Content>
-        )}
       </Main>
     </Body>
   );
