@@ -1,11 +1,11 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 
-import Preloader from './common/Preloader/Preloader';
-import Comments from './Comments';
+import Preloader from '../components/common/Preloader/Preloader';
+import Comments from '../components/Comments';
 import styled from 'styled-components';
 
-import { StoreComments } from '../hooks/storeComments';
+import { UseNewsComments } from '../hooks/useNewsComments';
 
 interface NewsProps {
   id: string | undefined;
@@ -53,9 +53,9 @@ const ItemButton = styled.div`
   margin-bottom: 10px;
 `;
 
-const ProfileNews = () => {
+const NewsProfilePage = () => {
   let { id }: NewsProps = useParams();
-  const { data, reload } = StoreComments(id);
+  const { data, reload } = UseNewsComments(id);
 
   if (!data) {
     return <Preloader />;
@@ -86,4 +86,4 @@ const ProfileNews = () => {
   }
 };
 
-export default ProfileNews;
+export default NewsProfilePage;

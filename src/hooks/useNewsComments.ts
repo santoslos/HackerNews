@@ -8,7 +8,7 @@ const getItem = async (url: string) => {
   return response.data;
 };
 
-export function StoreComments(id: string | undefined) {
+export function UseNewsComments(id: string | undefined) {
   const [idInterval, setIdInterval] = useState(0);
   let { data, mutate } = useSWR(`https://api.hnpwa.com/v0/item/${id}.json`, getItem);
 

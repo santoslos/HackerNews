@@ -8,19 +8,20 @@ const getNews = async (url: string) => {
   return response.data;
 };
 
-export function StoreNews() {
+export function UseNews() {
   const [page, setPage] = useState(1);
+  const [checkUpdate, setCheckUpdate] = useState(false);
   const [idInterval, setIdInterval] = useState(0);
   let { data, mutate, isValidating } = useSWR(`https://api.hnpwa.com/v0/newest/${page}.json`, getNews);
-
-  let time = React.useCallback( () => {
+  let time = React.useCallback(() => {
     return setInterval(() => {
       mutate(data, true);
     }, 60000);
   }, [page]);
 
-  const reload =  () => {
+  const reload = () => {
     mutate(data, true);
+    setCheckUpdate(!checkUpdate);
   };
 
   const setNewPage = React.useCallback((newPage: number) => {
@@ -32,21 +33,21 @@ export function StoreNews() {
     }
   }, []);
 
-  useEffect( () => {
+  useEffect(() => {
     if (idInterval) {
       clearInterval(idInterval);
     }
     mutate(data, true);
     const id = time();
-    // @ts-ignore
+    // @ts-expect-error
     setIdInterval(id);
-  }, [page]);
+  }, [page, checkUpdate]);
 
   const orderedNews = useMemo(() => {
     if (data) {
       let sort = [...data].sort((a, b) => (a.time < b.time ? 1 : -1));
       return sort;
-    }
+    } else return [];
   }, [data]);
 
   return {

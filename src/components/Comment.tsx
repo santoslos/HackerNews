@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Item } from '../types/News';
 import styled from 'styled-components';
 import Comments from './Comments';
-
+import sanitizeHtml from 'sanitize-html';
 interface commentProps {
   comment: Item;
 }
@@ -44,7 +44,7 @@ const Comment = ({ comment }: commentProps) => {
   const setView = (status: boolean) => {
     setViewAllComments(status);
   };
-
+  const sanitizeContent = sanitizeHtml(comment.content, { allowedTags: false, allowedAttributes: false });
   return (
     <CommentMain>
       <CommentItem key={comment.id} className={'list-group-item'}>
@@ -52,7 +52,7 @@ const Comment = ({ comment }: commentProps) => {
           {' '}
           {comment.user} {comment.time_ago}
         </TittleComment>
-        <CommentContent dangerouslySetInnerHTML={{ __html: comment.content }} />
+        <CommentContent dangerouslySetInnerHTML={{ __html: sanitizeContent }} />
         {comment.comments.length > 0 && (
           <CommentFooter
             onClick={() => {
