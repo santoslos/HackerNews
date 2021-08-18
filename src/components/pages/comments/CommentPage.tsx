@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Item } from '../types/News';
+import { Item } from '../../../types/News';
 import styled from 'styled-components';
-import Comments from './Comments';
+import Comments from './CommentsPage';
 import sanitizeHtml from 'sanitize-html';
 interface commentProps {
   comment: Item;
@@ -38,7 +38,7 @@ const TittleComment = styled.div`
   margin-bottom: 5px;
 `;
 
-const Comment = ({ comment }: commentProps) => {
+const CommentPage = ({ comment }: commentProps) => {
   const [viewAllComments, setViewAllComments] = useState(false);
 
   const setView = (status: boolean) => {
@@ -72,4 +72,4 @@ const Comment = ({ comment }: commentProps) => {
   );
 };
 
-export default Comment;
+export default CommentPage;

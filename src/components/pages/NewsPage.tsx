@@ -1,10 +1,10 @@
 import React from 'react';
 import NewsItem from './NewsItem';
-import Preloader from '../components/common/Preloader/Preloader';
+import Preloader from '../common/Preloader/Preloader';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { News } from '../types/News';
+import { News } from '../../types/News';
 
 interface NewsPageProps {
   isValidating: boolean;

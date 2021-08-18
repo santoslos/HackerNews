@@ -24,7 +24,7 @@ export interface Item {
   type: string;
   url?: string;
   domain?: string;
-  comments: Item[]; // Comments are items too
+  comments: Item[]; // CommentsPage are items too
   level: number;
   comments_count: number;
 }

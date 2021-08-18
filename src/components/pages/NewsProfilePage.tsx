@@ -1,11 +1,11 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 
-import Preloader from '../components/common/Preloader/Preloader';
-import Comments from '../components/Comments';
+import Preloader from '../common/Preloader/Preloader';
+import Comments from './comments/CommentsPage';
 import styled from 'styled-components';
 
-import { UseNewsComments } from '../hooks/useNewsComments';
+import { UseNewsComments } from '../../hooks/useNewsComments';
 
 interface NewsProps {
   id: string | undefined;

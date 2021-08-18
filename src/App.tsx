@@ -3,9 +3,9 @@ import { UseNews } from './hooks/useNews';
 import Preloader from './components/common/Preloader/Preloader';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Route, Switch, useLocation } from 'react-router-dom';
-import NewsProfilePage from './pages/NewsProfilePage';
+import NewsProfilePage from './components/pages/NewsProfilePage';
 import styled from 'styled-components';
-import NewsPage from './pages/NewsPage';
+import NewsPage from './components/pages/NewsPage';
 
 const Main = styled.div`
   display: flex;
@@ -48,7 +48,6 @@ function App() {
   if (isValidating || !orderedNews) {
     return <Preloader />;
   }
-
   return (
     <Body>
       <Main>
@@ -58,7 +57,7 @@ function App() {
               <NewsPage isValidating = {isValidating} orderedNews = {orderedNews}
                         page = {page} reload={reload}/>
             </Route>
-            <Route path="/news/:id" children={<NewsProfilePage />} />
+            <Route path="/news/:id" children={ <NewsProfilePage /> } />
           </Switch>
         </Content>
       </Main>
